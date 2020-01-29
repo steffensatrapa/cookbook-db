@@ -18,21 +18,22 @@ class CrLogger {
         }
 
         $user = CrLoginService::getLoggedInUser();
-        
+
         if ($user) {
             $logUser = $user->getUserName();
         } else {
             $logUser = "anonymous";
         }
 
+        if (CrConfig::logPath) {
+            $fullFileName = CrConfig::logPath . "/" . date("Y_m", time()) . "_log.txt";
 
-        $fullFileName = dirname(__FILE__) . "/../log/" . date("Y_m", time()) . "_log.txt";
+            $data = $logDate . "\t" . $logTime . "\t" . $logType . "\t" . $logSystem . "\t" . $logIp . "\t" . $logHost . "\t" . $logUser . "\t" . $logMessage . "\n";
 
-        $data = $logDate . "\t" . $logTime . "\t" . $logType . "\t" . $logSystem . "\t" . $logIp . "\t" . $logHost . "\t" . $logUser . "\t" . $logMessage . "\n";
-
-        $file = fopen($fullFileName, "a+");
-        fwrite($file, $data);
-        fclose($file);
+            $file = fopen($fullFileName, "a+");
+            fwrite($file, $data);
+            fclose($file);
+        }
     }
 
 }
