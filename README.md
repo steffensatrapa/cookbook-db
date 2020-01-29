@@ -3,9 +3,9 @@ A self hosted cooking recipe database which is accessible via computer, tabled o
 
 ## why?
 Because I can.  
-I was annoyed from our mess of printed cooking recipes which where stored chaotically in a ring binder. From different sources, damaged punching holes, grease spots, etc. Every time I was flipping through the complete folder to find a specific recipe.  
+I was annoyed from our mess of printed cooking recipes which where stored chaotically in a ring binder. From different sources, damaged punching holes, grease spots, etc. Every time I had to flip through the complete folder to find a specific recipe.  
 I did not want to use the big web portals like chefkoch-de, because of massive advertising and dependence. Keep your data yours. 
-Also I wanted to be able to implement my own query queries like "give my a *random* receipe with tag *main dish*".
+Also I wanted to be able to implement my own query queries like "give my a *random* receipe with Tag *main dish*".
 
 ## features
 - simple to use. No unnecessary functions and bloat. 
