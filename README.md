@@ -2,8 +2,8 @@
 A self hosted cooking recipe database which is accessible via computer, tabled or smartphone. No unnecessary functions, simple to use, full-text search and tags. Fitted for me and my family and who else is interested.
 
 ## why?
-Because I can. 
-I was annoyed from our mess of printed cooking recipes which where stored chaotically in a ring binder. From different sources, damaged punching holes, grease spots, etc. Every time I was flipping through the complete folder to find a specific recipe. 
+Because I can.  
+I was annoyed from our mess of printed cooking recipes which where stored chaotically in a ring binder. From different sources, damaged punching holes, grease spots, etc. Every time I was flipping through the complete folder to find a specific recipe.  
 I did not want to use the big web portals like chefkoch-de, because of massive advertising and dependence. Keep your data yours. 
 Also I wanted to be able to implement my own query queries like "give my a *random* receipe with tag *main dish*".
 
@@ -38,17 +38,17 @@ You can *create*, *edit* and *delete* with this user. Don't worry, the demo inst
 - a little experience in web-administration, PHP and mySQL:
 
 ## installation
-Here are the quick steps for installing. You need to have a little experience in web-administration, php and mysql :
-- files:
-	1. Download and unzip the repository to a temporary location.
-	2. Copy all files and folder from htdocs/ to your webspace on your webserver.
-- database:
-	3. Create a mySQL database on your webserver.
-	4. Edit lib/CrConfig.php and enter your database name and credentials.
-	5. Call http://yourwebserver.net/setupDatabase.php the tables will be created.
-- users:
-	7. Edit setupUser.php and enter username, password and email for your first user.
-	8. Call http://yourwebserver.net/setupUsers.php the user will be added/updated.
+Here are the quick steps for installing. 
+### files:
+1. Download and unzip the repository to a temporary location.
+2. Copy all files and folder from htdocs/ to your webspace on your webserver.
+### database:
+3. Create a mySQL database on your webserver.
+4. Edit lib/CrConfig.php and enter your database name and credentials.
+5. Call http://yourwebserver.net/setupDatabase.php the tables will be created.
+### users:
+7. Edit setupUser.php and enter username, password and email for your first user.
+8. Call http://yourwebserver.net/setupUsers.php the user will be added/updated.
 
 Done. Call http://yourwebserver.net/ to get the overview and create your first cooking recipe.
 
