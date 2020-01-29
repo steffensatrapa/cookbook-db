@@ -12,9 +12,6 @@ $user->setCanEdit(true);
 $user->setCanEditForeign(true);
 $user->saveToDatabase();
 
-
-
-
-
-
-
+echo "<pre>";
+echo "Created or updated:\n";
+print_r($user);
