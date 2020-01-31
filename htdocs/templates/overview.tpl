@@ -1,11 +1,14 @@
-{include file="_header.tpl" title="Satrapas Kochbuch"}
-<h1>Übersicht</h1>
+{include file="_header.tpl" title=""}
+<h1>{if $lang=="de"}Übersicht{else}Overview{/if}</h1>
+
 {if isset($keywords) && $keywords}
-    <h2>Suche nach: {$keywords}</h2>
+    <h2>{if $lang=="de"}Suche nach{else}Searching for{/if}: {$keywords}</h2>
 {/if}
+
 {if isset($filterTag) && $filterTag}
-    <h2>Filter nach: {$filterTag}</h2>
+    <h2>{if $lang=="de"}Filter nach{else}Filter for{/if}: {$filterTag}</h2>
 {/if}
+
 <ul>
     {foreach from=$recipes item=recipe}
         <li>
@@ -13,7 +16,7 @@
                 {if $recipe->getTitle()}
                     {$recipe->getTitle()}
                 {else}
-                    [kein Titel]
+                    {if $lang=="de"}[kein Titel]{else}[no title]{/if}
                 {/if}
             </a> 
             {if CrLoginService::isAllowedToEdit($recipe->getCreatedBy())}
@@ -25,7 +28,7 @@
         </li>
     {/foreach}
 </ul>
-<h2>Tags</h2>
+<h2>{if $lang=="de"}Tags{else}Tags{/if}</h2>
 
 {foreach from=$allTags item=tag}
     <a href="?action=filter&tag={$tag.description}">

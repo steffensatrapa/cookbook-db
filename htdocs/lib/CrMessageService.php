@@ -2,28 +2,28 @@
 
 class CrMessageService {
 
-    public static function setError($message, $title = "") {
-        $_SESSION['errorMessage'] = $message;
-        $_SESSION['errorMessageHeader'] = $title;
+    public static function setError($message, $params = array()) {
+        $_SESSION['displayMessageType'] = "error";
+        $_SESSION['displayMessage'] = $message;
+        $_SESSION['displayMessageParams'] = $params;
     }
 
-    public static function setWarning($message, $title = "") {
-        $_SESSION['warningMessage'] = $message;
-        $_SESSION['warningMessageHeader'] = $title;
+    public static function setWarning($message, $params = array()) {
+        $_SESSION['displayMessageType'] = "warning";
+        $_SESSION['displayMessage'] = $message;
+        $_SESSION['displayMessageParams'] = $params;
     }
 
-    public static function setSuccess($message, $title = "") {
-        $_SESSION['successMessage'] = $message;
-        $_SESSION['successMessageHeader'] = $title;
+    public static function setSuccess($message, $params = array()) {
+        $_SESSION['displayMessageType'] = "success";
+        $_SESSION['displayMessage'] = $message;
+        $_SESSION['displayMessageParams'] = $params;
     }
 
     private static function clear() {
-        $_SESSION['errorMessage'] = "";
-        $_SESSION['errorMessageHeader'] = "";
-        $_SESSION['warningMessage'] = "";
-        $_SESSION['warningMessageHeader'] = "";
-        $_SESSION['successMessage'] = "";
-        $_SESSION['successMessageHeader'] = "";
+        $_SESSION['displayMessageType'] = "";
+        $_SESSION['displayMessage'] = "";
+        $_SESSION['displayMessageParams'] = array();
     }
 
     /**
@@ -32,12 +32,14 @@ class CrMessageService {
      */
     public static function applyToTemplate($htmlTemplate) {
 
-        $htmlTemplate->assign("errorMessage", $_SESSION['errorMessage']);
-        $htmlTemplate->assign("errorMessageHeader", $_SESSION['errorMessageHeader']);
-        $htmlTemplate->assign("warningMessage", $_SESSION['warningMessage']);
-        $htmlTemplate->assign("warningMessageHeader", $_SESSION['warningMessageHeader']);
-        $htmlTemplate->assign("successMessage", $_SESSION['successMessage']);
-        $htmlTemplate->assign("successMessageHeader", $_SESSION['successMessageHeader']);
+        $htmlTemplate->assign("displayMessageType", $_SESSION['displayMessageType']);
+        $htmlTemplate->assign("displayMessage", $_SESSION['displayMessage']);
+
+        if (isset($_SESSION['displayMessageParams']) && is_array($_SESSION['displayMessageParams'])) {
+            foreach ($_SESSION['displayMessageParams'] as $param) {
+                $htmlTemplate->assign($param["key"], $param["value"]);
+            }
+        }
 
         CrMessageService::clear();
     }

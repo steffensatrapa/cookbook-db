@@ -26,6 +26,21 @@ function getRecipe() {
     return $recipe;
 }
 
+function getLanguage() {
+    if (isset($_SESSION['forceLanguage'])) {
+        return $_SESSION['forceLanguage'];
+    } else {
+        $browserLang = substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0, 2);
+
+        switch ($browserLang) {
+            case "de":
+                return "de";
+            default:
+                return "en";
+        }
+    }
+}
+
 /**
  * 
  * @param CrRecipe $recipe
@@ -34,7 +49,7 @@ function getRecipe() {
 function ensureIsLoggedIn($recipe, $htmlTemplate) {
     if (!CrLoginService::getLoggedInUser()) {
         CrLogger::log("main", CrLogType::ERROR, "Not logged in for action. Recipe: '" . $recipe->getId() . "' (" . $recipe->getTitle() . ").");
-        CrMessageService::setError("Für diese Aktion musst du eingeloggt sein. Bitte logge dich über das Menü ein, bevor zu fortfährst.", "Nicht eingeloggt!");
+        CrMessageService::setError("notLoggedIn", "notLoggedIn");
         displayDefaultTemplate($htmlTemplate);
     }
 }
@@ -89,7 +104,7 @@ function getAllTags() {
     foreach ($rows as $tag) {
         array_push($tags, array('description' => htmlentities($tag['description']), 'count' => $tag['count']));
     }
-    
+
     return $tags;
 }
 
@@ -175,7 +190,6 @@ function processActionView($htmlTemplate) {
 }
 
 function processActionSearch($htmlTemplate) {
-    $recipe = getRecipe();
     $keywords = filter_input(INPUT_GET, "keywords");
     if ($keywords) {
         CrLogger::log("main", CrLogType::INFO, "Searching for: '" . $keywords . "' ...");
@@ -204,7 +218,6 @@ function processActionSearch($htmlTemplate) {
 }
 
 function processActionFilter($htmlTemplate) {
-    $recipe = getRecipe();
     $tag = filter_input(INPUT_GET, "tag");
     if ($tag) {
         CrLogger::log("main", CrLogType::INFO, "Filter for tag: '" . $tag . "' ...");
@@ -225,6 +238,17 @@ function processActionFilter($htmlTemplate) {
     }
 }
 
+function processActionSetLanguage($htmlTemplate) {
+    $lang = filter_input(INPUT_GET, "lang");
+    if ($lang === "de" || $lang === "en") {
+        $_SESSION['forceLanguage'] = $lang;
+    } else {
+        //language not supported
+    }
+    
+    displayDefaultTemplate($htmlTemplate);
+}
+
 // -----------------------------------------------------------------------------
 
 $action = filter_input(INPUT_POST, "action", FILTER_SANITIZE_STRING);
@@ -234,6 +258,7 @@ if (!$action) {
 
 $htmlTemplate = CrHtmlTemplate::getTemplate();
 $htmlTemplate->assign("loggedInUser", CrLoginService::getLoggedInUser());
+$htmlTemplate->assign("lang", getLanguage());
 $htmlTemplate->assign("action", $action);
 $htmlTemplate->assign("allTags", getAllTags());
 
@@ -257,6 +282,8 @@ if ($action == "login") {
     processActionSearch($htmlTemplate);
 } else if ($action == "filter") {
     processActionFilter($htmlTemplate);
+} else if ($action == "language") {
+    processActionSetLanguage($htmlTemplate);
 } else {
     displayDefaultTemplate($htmlTemplate);
 }

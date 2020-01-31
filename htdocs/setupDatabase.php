@@ -6,5 +6,3 @@ CrUser::createDatabaseTable();
 CrRecipe::createDatabaseTable();
 CrIngredient::createDatabaseTable();
 CrTag::createDatabaseTable();
-
-echo "Done. Created all tables.";
