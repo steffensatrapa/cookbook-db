@@ -8,34 +8,42 @@
 {if isset($filterTag) && $filterTag}
     <h2>{if $lang=="de"}Filter nach{else}Filter for{/if}: {$filterTag}</h2>
 {/if}
+<div class="row">
+    <div class="col-md-8">
+        <h2>{if $lang=="de"}Rezepte{else}Recipe{/if}</h2>
+        <ul>
+            {foreach from=$recipes item=recipe}
+                <li>
+                    <a href="?action=view&recipeId={$recipe->getId()}">
+                        {if $recipe->getTitle()}
+                            {$recipe->getTitle()}
+                        {else}
+                            {if $lang=="de"}[kein Titel]{else}[no title]{/if}
+                        {/if}
+                    </a> 
+                    {if CrLoginService::isAllowedToEdit($recipe->getCreatedBy())}
+                        <a href="?action=edit&recipeId={$recipe->getId()}">
+                            <i class="fa fa-pencil" aria-hidden="true"></i>
+                        </a>
+                    {/if}
 
-<ul>
-    {foreach from=$recipes item=recipe}
-        <li>
-            <a href="?action=view&recipeId={$recipe->getId()}">
-                {if $recipe->getTitle()}
-                    {$recipe->getTitle()}
-                {else}
-                    {if $lang=="de"}[kein Titel]{else}[no title]{/if}
-                {/if}
-            </a> 
-            {if CrLoginService::isAllowedToEdit($recipe->getCreatedBy())}
-                <a href="?action=edit&recipeId={$recipe->getId()}">
-                    <i class="fa fa-pencil" aria-hidden="true"></i>
-                </a>
-            {/if}
+                </li>
+            {/foreach}
+        </ul>
+    </div>
+    <div class="col-sm-4">
+        <h2>{if $lang=="de"}Tags{else}Tags{/if}</h2>
 
-        </li>
-    {/foreach}
-</ul>
-<h2>{if $lang=="de"}Tags{else}Tags{/if}</h2>
+        {foreach from=$allTags item=tag}
+            <a href="?action=filter&tag={$tag.description}">
+                <button type="button" class="btn btn-outline-primary  m-1">
+                    {$tag.description} <span class="badge badge-secondary">{$tag.count}</span>
+                </button>
+            </a>
+        {/foreach}
 
-{foreach from=$allTags item=tag}
-    <a href="?action=filter&tag={$tag.description}">
-        <button type="button" class="btn btn-outline-primary  m-1">
-            {$tag.description} <span class="badge badge-secondary">{$tag.count}</span>
-        </button>
-    </a>
-{/foreach}
+    </div>
+</div>
+
 
 {include file="_footer.tpl"}
