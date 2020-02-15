@@ -49,7 +49,7 @@ function getLanguage() {
 function ensureIsLoggedIn($recipe, $htmlTemplate) {
     if (!CrLoginService::getLoggedInUser()) {
         CrLogger::log("main", CrLogType::ERROR, "Not logged in for action. Recipe: '" . $recipe->getId() . "' (" . $recipe->getTitle() . ").");
-        CrMessageService::setError("notLoggedIn", "notLoggedIn");
+        CrMessageService::setError("notLoggedIn");
         displayDefaultTemplate($htmlTemplate);
     }
 }
@@ -64,7 +64,12 @@ function ensureIsAllowedToEdit($recipe, $htmlTemplate) {
 
     if (!CrLoginService::isAllowedToEdit($recipe->getCreatedBy())) {
         CrLogger::log("main", CrLogType::ERROR, "Not allowed to edit recipe: '" . $recipe->getId() . "' (" . $recipe->getTitle() . ").");
-        CrMessageService::setError("Du hast keine Berechtigung um das Rezept <i>'" . $recipe->getTitle() . "'</i> von <i>" . $recipe->getCreatedBy()->getUserName() . "</i> zu editieren. Wende dich bitte an den Support.", "Keine Berechtigung!");
+
+        CrMessageService::setError("notAllowedToEdit", array(
+            array("key" => "notAllowedRecipeTitle", "value" => $recipe->getId()),
+            array("key" => "notAllowedRecipeCreateBy", "value" => $recipe->getCreatedBy()->getUserName())
+        ));
+
         displayDefaultTemplate($htmlTemplate);
     }
 }
@@ -79,7 +84,12 @@ function ensureIsAllowedToDelete($recipe, $htmlTemplate) {
 
     if (!CrLoginService::isAllowedToDelete($recipe->getCreatedBy())) {
         CrLogger::log("main", CrLogType::ERROR, "Not allowed to delete recipe: '" . $recipe->getId() . "' (" . $recipe->getTitle() . ").");
-        CrMessageService::setError("Du hast keine Berechtigung um das Rezept <i>'" . $recipe->getTitle() . "'</i> von <i>" . $recipe->getCreatedBy()->getUserName() . "</i> zu löschen. Wende dich bitte an den Support.", "Keine Berechtigung!");
+
+        CrMessageService::setError("notAllowedToDelete", array(
+            array("key" => "notAllowedRecipeTitle", "value" => $recipe->getId()),
+            array("key" => "notAllowedRecipeCreateBy", "value" => $recipe->getCreatedBy()->getUserName())
+        ));
+
         displayDefaultTemplate($htmlTemplate);
     }
 }
@@ -117,12 +127,16 @@ function processActionLogin($htmlTemplate) {
         displayTemplate("login.tpl", $htmlTemplate);
     } else if (CrLoginService::login($userName, $password)) {
         CrLogger::log("main", CrLogType::INFO, "Login with user '" . $userName . "'.");
-        CrMessageService::setSuccess("Du hast dich erfolgreich als '" . htmlentities($userName) . "' angemeldet!", "Anmeldung erfolgreich!");
+
+        CrMessageService::setSuccess("successLogin", array(
+            array("key" => "successLoginUser", "value" => htmlentities($userName))
+        ));
+
         header("Location: ?");
         die;
     } else {
         CrLogger::log("main", CrLogType::ERROR, "Login failed with user '" . $userName . "'.");
-        CrMessageService::setError("Login mit '" . htmlentities($userName) . "' fehlgeschlagen!", "Anmeldung fehlgeschlagen!");
+        CrMessageService::setError("errorLogin", array(array("key" => "errorLoginUser", "value" => htmlentities($userName))));
         header("Location: ?action=login");
         die;
     }
@@ -131,7 +145,7 @@ function processActionLogin($htmlTemplate) {
 function processActionLogout($htmlTemplate) {
     CrLogger::log("main", CrLogType::INFO, "Logout.");
     CrLoginService::logout();
-    CrMessageService::setSuccess("Du hast dich erfolgreich abgemeldet.", "Abmeldung erfolgreich!");
+    CrMessageService::setSuccess("successlogout");
     header("Location: ?");
 }
 
@@ -152,7 +166,7 @@ function processActionSave($htmlTemplate) {
     $recipe->saveToDatabase(CrLoginService::getLoggedInUser());
 
     CrLogger::log("main", CrLogType::INFO, "Recipe '" . $recipe->getId() . "' (" . $recipe->getTitle() . ") saved.");
-    CrMessageService::setSuccess("Rezept erfolgreich gespeichert.");
+    CrMessageService::setSuccess("successSave", array(array("key" => "messageRecipeTitle", "value" => $recipe->getTitle())));
 
     if ($doExit) {
         header("Location: ?" . $recipe->getId());
@@ -170,7 +184,7 @@ function processActionDelete($htmlTemplate) {
     $recipe->delete(CrLoginService::getLoggedInUser());
 
     CrLogger::log("main", CrLogType::INFO, "Recipe '" . $recipe->getId() . "' (" . $recipe->getTitle() . ") deleted.");
-    CrMessageService::setSuccess("Rezept erfolgreich gelöscht.");
+    CrMessageService::setSuccess("successDelete", array(array("key" => "messageRecipeTitle", "value" => $recipe->getTitle())));
 
     header("Location: ?");
     die;
@@ -242,11 +256,13 @@ function processActionSetLanguage($htmlTemplate) {
     $lang = filter_input(INPUT_GET, "lang");
     if ($lang === "de" || $lang === "en") {
         $_SESSION['forceLanguage'] = $lang;
+        CrMessageService::setSuccess("successLanguage", array(array("key" => "messageLanguageLang", "value" => $lang)));
     } else {
-        //language not supported
+        CrMessageService::setError("errorLanguage", array(array("key" => "messageLanguageLang", "value" => $lang)));
     }
-    
-    displayDefaultTemplate($htmlTemplate);
+
+    header("Location: ?");
+    die;
 }
 
 // -----------------------------------------------------------------------------

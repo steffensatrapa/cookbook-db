@@ -57,15 +57,15 @@
                     Saved
                 {/if}
             {/if}
-
-            {if $displayMessage=="errorLanguage"}
+            
+             {if $displayMessage=="errorLanguage"}
                 {if $lang=="de"}
                     Fehler
                 {else}
                     Error
                 {/if}
             {/if}
-
+            
             {if $displayMessage=="successLanguage"}
                 {if $lang=="de"}
                     Erfolg
@@ -150,7 +150,7 @@
                     Successfully deleted recipe '{$messageRecipeTitle}'.
                 {/if}
             {/if}
-
+            
             {if $displayMessage=="errorLanguage"}
                 {if $lang=="de"}
                     Sprache '{$messageLanguageLang}' nicht unterstützt.
@@ -158,7 +158,7 @@
                     Language '{$messageLanguageLang}'not supported.
                 {/if}
             {/if}
-
+            
             {if $displayMessage=="successLanguage"}
                 {if $lang=="de"}
                     Sprache '{$messageLanguageLang}' erfolgreich gesetzt.
