@@ -11,7 +11,8 @@ class CrUnit {
         array("milligramm", "mg"),
         array("milligramm", "mg"),
         array("teelöffel", "TL"),
-        array("esslöffel", "EL")
+        array("esslöffel", "EL"),
+        array("päckchen", "Pck.")
     );
     const units = array(
         "l",
@@ -22,7 +23,8 @@ class CrUnit {
         "TL",
         "EL",
         "Bund",
-        "Prise"
+        "Prise",
+        "Pck."
     );
 
     private static function replaceAlias($str) {
