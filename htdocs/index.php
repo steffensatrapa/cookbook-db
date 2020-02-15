@@ -169,7 +169,7 @@ function processActionSave($htmlTemplate) {
     CrMessageService::setSuccess("successSave", array(array("key" => "messageRecipeTitle", "value" => $recipe->getTitle())));
 
     if ($doExit) {
-        header("Location: ?" . $recipe->getId());
+        header("Location: ?");
         die;
     } else {
         header("Location: ?action=edit&recipeId=" . $recipe->getId());
